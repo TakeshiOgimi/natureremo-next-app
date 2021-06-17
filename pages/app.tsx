@@ -151,7 +151,7 @@ export const Home = (): JSX.Element => (
         </Title>
 
         <Description>
-          Get started by editing <Code>pages/index.tsx</Code>
+          Get started by editing <Code>pages/app.tsx</Code>
         </Description>
 
         <Grid>
