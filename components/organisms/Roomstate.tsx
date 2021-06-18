@@ -1,11 +1,10 @@
 import {FC, useEffect, useState} from 'react'
 
-type Props = {}
-
-const Roomstate:FC<Props> = (Props) => {
+const Roomstate:FC = () => {
   const [state, setState] = useState({})
   useEffect(() => {
-    fetch('https://api.nature.global/1/devices', {
+    const apiCallIntervalId = setInterval(() => {
+      fetch('https://api.nature.global/1/devices', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -13,6 +12,11 @@ const Roomstate:FC<Props> = (Props) => {
       }
     }).then(r => r.json())
     .then(j => setState(j))
+    }, 10000)
+
+    return () => {
+      clearInterval(apiCallIntervalId)
+    }
   },[])
 
   return (
