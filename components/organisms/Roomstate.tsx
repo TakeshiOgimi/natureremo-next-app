@@ -8,11 +8,31 @@ import {FC, useEffect, useState} from 'react'
 import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
+// NatureRemoApiのアクセストークン
+// TODO: 終わり次第Nature remo 側からトークンを無効化にする必要あり
+const API_TOKEN = 'wQPhjMPVlFwLaCzRdlVmmo0Z7Mjw-oJVM0hs_a0MpCU.mVB43m2sogf_T5w6kFEDgK5-Huo2NWxrCD70nKa2iDk'
+
 const Roomstate:FC = () => {
   // 最新室温情報を取得
   const [status, setStatus] = useState({})
 
+  const callApi = () => {
+    fetch('https://api.nature.global/1/devices', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${API_TOKEN}`
+      }
+    })
+    .then(r => r.json())
+    .then(j => setStatus(j))
+    .catch(e => {
+      console.error('Error', e)
+    })
+  }
+
   useEffect(() => {
+    callApi()
     const apiCallIntervalId = setInterval(() => {
       fetch('https://api.nature.global/1/devices', {
         method: 'GET',
@@ -59,6 +79,13 @@ const Roomstate:FC = () => {
     const temperatureList = newStatusList.map(v => v?.temperature || 0)
     // 湿度
     const humidityList = newStatusList.map(v => v?.humidity || 0)
+    // 明るさ
+    const illuminationList = newStatusList.map(v => v?.illumination || 0)
+    // 人感
+    const movementList = newStatusList.map(v => v?.movement || 0)
+
+    const temperatureColor = '#FFFF00'
+
     const newOption = {
       options: {
         chart: {
@@ -74,16 +101,37 @@ const Roomstate:FC = () => {
         },
         yaxis:[
           {
+            axisBorder: {
+              show: true,
+            },
             title: {
               text: '温度',
+              style: {
+                fontSize: '20px',
+              }
+            },
+            label: {
+              style: {
+              }
+            }
+          },
+          {
+            title: {
+              text: '湿度',
             },
           },
           {
             opposite: true,
             title: {
-              text: '湿度',
+              text: '明るさ',
             },
           },
+          {
+            opposite: true,
+            title: {
+              text: '人感',
+            },
+          }
         ],
         tooltip: {
           x: {
@@ -93,16 +141,27 @@ const Roomstate:FC = () => {
       },
       series:[
         {
-          name: 'Temperature',
-          type: 'area',
+          name: '温度',
+          type: 'line',
           data: temperatureList
         },
         {
-          name: 'humidity',
+          name: '湿度',
           type: 'line',
           data: humidityList
+        },
+        {
+          name: '明るさ',
+          type: 'line',
+          data: illuminationList
+        },
+        {
+          name: '人感センサー',
+          type: 'line',
+          data:movementList
         }
-      ]
+      ],
+      colors: ['#f00', '#0f0', '#00f', '#ff0']
     }
     setChartOption(newOption)
   }, [status])
@@ -123,7 +182,6 @@ const Roomstate:FC = () => {
   return (
     <div>
       <p>{count} sec</p>
-      <p>{JSON.stringify(statusList)}</p>
       <div>
         <ReactApexChart options={chartOption?.options || {}} series={chartOption?.series || []}/>
       </div>
