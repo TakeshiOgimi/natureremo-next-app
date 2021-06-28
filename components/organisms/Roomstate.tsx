@@ -10,6 +10,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 // 外部コンポーネント
 import Temperature from '../molecules/Temperature'
+import Humidity from '../molecules/Humidity'
 
 // NatureRemoApiのアクセストークン
 // TODO: 終わり次第Nature remo 側からトークンを無効化にする必要あり
@@ -187,9 +188,17 @@ const Roomstate:FC = () => {
     <div>
       <p>{count} sec</p>
       <div>
-        <ReactApexChart options={chartOption?.options || {}} series={chartOption?.series || []}/>
+        <ReactApexChart
+          options={chartOption?.options || {}}
+          series={chartOption?.series || []}
+        />
       </div>
-      <Temperature temperature={statusList[statusList.length - 1]?.temperature || 0} />
+      <Temperature
+        temperature={statusList[statusList.length - 1]?.temperature || 0}
+      />
+      <Humidity
+        humidity={statusList[statusList.length - 1]?.humidity || 0}
+      />
     </div>
   )
 }
