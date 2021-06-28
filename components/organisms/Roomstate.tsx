@@ -8,10 +8,14 @@ import {FC, useEffect, useState} from 'react'
 import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
+// 外部コンポーネント
+import Temperature from './Temperature'
+
 // NatureRemoApiのアクセストークン
 // TODO: 終わり次第Nature remo 側からトークンを無効化にする必要あり
 const API_TOKEN = 'wQPhjMPVlFwLaCzRdlVmmo0Z7Mjw-oJVM0hs_a0MpCU.mVB43m2sogf_T5w6kFEDgK5-Huo2NWxrCD70nKa2iDk'
 
+// TODO: いつか通信部分を切り出す
 const Roomstate:FC = () => {
   // 最新室温情報を取得
   const [status, setStatus] = useState({})
@@ -185,6 +189,7 @@ const Roomstate:FC = () => {
       <div>
         <ReactApexChart options={chartOption?.options || {}} series={chartOption?.series || []}/>
       </div>
+      <Temperature temperature={statusList[statusList.length - 1]?.temperature || 0} />
     </div>
   )
 }
