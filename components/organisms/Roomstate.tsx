@@ -1,4 +1,5 @@
 import {FC, useEffect, useState} from 'react'
+import styled from 'styled-components';
 /**
  * 下記コメントアウトのインポートを使うと window is not defined で怒られるので
  * 下記URLに記載がある dynamic Import で解決
@@ -11,6 +12,8 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 // 外部コンポーネント
 import Temperature from '../molecules/Temperature'
 import Humidity from '../molecules/Humidity'
+import Illumination from '../molecules/Illumination'
+import Movement from '../molecules/Movement'
 
 // NatureRemoApiのアクセストークン
 // TODO: 終わり次第Nature remo 側からトークンを無効化にする必要あり
@@ -193,14 +196,26 @@ const Roomstate:FC = () => {
           series={chartOption?.series || []}
         />
       </div>
-      <Temperature
-        temperature={statusList[statusList.length - 1]?.temperature || 0}
-      />
-      <Humidity
-        humidity={statusList[statusList.length - 1]?.humidity || 0}
-      />
+      <FlexBox>
+        <Temperature
+          temperature={statusList[statusList.length - 1]?.temperature || 0}
+        />
+        <Humidity
+          humidity={statusList[statusList.length - 1]?.humidity || 0}
+        />
+        <Illumination
+          illumination={statusList[statusList.length - 1]?.illumination || 0}
+        />
+        <Movement
+          movement={statusList[statusList.length - 1]?.movement || 0}
+        />
+      </FlexBox>
     </div>
   )
 }
+
+const FlexBox = styled.div`
+  display: flex;
+`
 
 export default Roomstate
