@@ -4,12 +4,14 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 type Props = {
   movement: number
+  height?: number
 }
 
-const Movement:FC<Props> = ({movement}) => {
+const Movement:FC<Props> = ({movement, height}) => {
   const existsMessage = movement === 0 ? '誰もいない' : '誰かいる'
+  const per = 1 / movement * 100
   const options = {
-    series: [movement],
+    series: [per],
     options: {
       chart: {
         height: 350,
@@ -61,7 +63,7 @@ const Movement:FC<Props> = ({movement}) => {
             },
             value: {
               formatter: function(val) {
-                return parseInt(val);
+                return parseInt(movement);
               },
               color: '#111',
               fontSize: '36px',
@@ -80,7 +82,7 @@ const Movement:FC<Props> = ({movement}) => {
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [0, 1]
+          stops: [0, 100]
         }
       },
       stroke: {
@@ -91,9 +93,18 @@ const Movement:FC<Props> = ({movement}) => {
   };
   return (
     <div>
-      <ReactApexChart options={options.options} series={options.series} type="radialBar" height={350} />
+      <ReactApexChart
+        options={options.options}
+        series={options.series}
+        type="radialBar"
+        height={height}
+      />
     </div>
   )
+}
+
+Movement.defaultProps = {
+  height: 200
 }
 
 export default Movement

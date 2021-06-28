@@ -4,11 +4,13 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 type Props = {
   illumination: number
+  height?: number
 }
 
-const Illumination:FC<Props> = ({illumination}) => {
+const Illumination:FC<Props> = ({illumination, height}) => {
+  const per = illumination / 255 * 100
   const options = {
-    series: [illumination],
+    series: [per],
     options: {
       chart: {
         height: 350,
@@ -59,8 +61,8 @@ const Illumination:FC<Props> = ({illumination}) => {
               fontSize: '17px'
             },
             value: {
-              formatter: function(val) {
-                return parseInt(val);
+              formatter: function() {
+                return parseInt(illumination);
               },
               color: '#111',
               fontSize: '36px',
@@ -79,7 +81,7 @@ const Illumination:FC<Props> = ({illumination}) => {
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [0, 255]
+          stops: [0, 100]
         }
       },
       stroke: {
@@ -90,9 +92,18 @@ const Illumination:FC<Props> = ({illumination}) => {
   };
   return (
     <div>
-      <ReactApexChart options={options.options} series={options.series} type="radialBar" height={350} />
+      <ReactApexChart
+        options={options.options}
+        series={options.series}
+        type="radialBar"
+        height={height}
+      />
     </div>
   )
+}
+
+Illumination.defaultProps = {
+  height: 200
 }
 
 export default Illumination

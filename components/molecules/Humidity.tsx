@@ -4,9 +4,10 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 type Props = {
   humidity: number
+  height?: number
 }
 
-const Humidity:FC<Props> = ({humidity}) => {
+const Humidity:FC<Props> = ({humidity, height}) => {
   const options = {
     series: [humidity],
     options: {
@@ -90,9 +91,18 @@ const Humidity:FC<Props> = ({humidity}) => {
   };
   return (
     <div>
-      <ReactApexChart options={options.options} series={options.series} type="radialBar" height={350} />
+      <ReactApexChart
+        options={options.options}
+        series={options.series}
+        type="radialBar"
+        height={height}
+      />
     </div>
   )
+}
+
+Humidity.defaultProps = {
+  height: 200
 }
 
 export default Humidity

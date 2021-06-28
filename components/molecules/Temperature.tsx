@@ -4,9 +4,10 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 type Props = {
   temperature: number
+  height?: number
 }
 
-const Temperature:FC<Props> = ({temperature}) => {
+const Temperature:FC<Props> = ({temperature, height}) => {
   const options = {
     series: [temperature],
     options: {
@@ -60,7 +61,7 @@ const Temperature:FC<Props> = ({temperature}) => {
             },
             value: {
               formatter: function(val) {
-                return parseInt(val);
+                return parseFloat(val)
               },
               color: '#111',
               fontSize: '36px',
@@ -90,9 +91,18 @@ const Temperature:FC<Props> = ({temperature}) => {
   };
   return (
     <div>
-      <ReactApexChart options={options.options} series={options.series} type="radialBar" height={350} />
+      <ReactApexChart
+        options={options.options}
+        series={options.series}
+        type="radialBar"
+        height={height}
+      />
     </div>
   )
+}
+
+Temperature.defaultProps = {
+  height: 200
 }
 
 export default Temperature
