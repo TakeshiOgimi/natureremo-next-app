@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false})
 
 // 外部コンポーネント
-import Temperature from './Temperature'
+import Temperature from '../molecules/Temperature'
 
 // NatureRemoApiのアクセストークン
 // TODO: 終わり次第Nature remo 側からトークンを無効化にする必要あり
