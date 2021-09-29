@@ -45,7 +45,7 @@ const Roomstate:FC = () => {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer wQPhjMPVlFwLaCzRdlVmmo0Z7Mjw-oJVM0hs_a0MpCU.mVB43m2sogf_T5w6kFEDgK5-Huo2NWxrCD70nKa2iDk'
+          'Authorization': `Bearer ${API_TOKEN}`
         }
       })
       .then(r => r.json())
